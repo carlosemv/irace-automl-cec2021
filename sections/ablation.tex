@@ -1,0 +1,26 @@
+% !TEX root = ../main.tex
+
+\section{Ablating \isklearn}
+\label{sec:further}
+
+Results from the first part of our investigation validated our \irace AutoML proposal as a competitive approach in terms of efficacy. We next ablate \isklearn to understand how the proposed configuration space and setup affect its performance. We start with a configuration space analysis,  where we assess the benefits of having a minimalist template. Later, we appraise different configuration setups, exploring the idea of the generalized mid-level sampling and providing guidelines for the application of \isklearn to other problems.
+
+% Yet, CIFAR-10 results indicate that further investigation is required on more challenging domains, such as computer vision. In this section, we assess~(i)~alternative configuration setups and~(ii)~the feasibility of transfer learning. The datasets adopted in this section were chosen for their popularity in the small image classification literature. Specifically, we replace MNIST with Fashion MNIST~(FMNIST), given the small margin for improvement on the former. In addition, we also consider CIFAR-100, a dataset similar to CIFAR-10, and SVHN, a house number recognition problem. Further information on these datasets is given in the supplementary material, particularly the details on manual data preparation, sampling, and resource limits for \autosklearn.
+
+%\input{sections/transfer-learning}
+\subsection{Comparing configuration spaces}
+
+To assess the benefits of having a simpler template in terms of efficacy of the pipelines produced, we use SMAC~\cite{smac} to configure pipelines from our template. Since SMAC is the configurator powering \autosklearn, the comparison given in Figure~\ref{fig:smac} helps us isolate the effects of configurator and templated adopted. We focus this investigation on CV datasets as they were the most challenging for both AutoML approaches.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth, clip=true, trim=45px 80px 80px 40px]{img/smac.png}
+    \caption{Accuracy comparison between pipelines configured by \tinyirace~(blue) and SMAC~(green) from \tinyisklearn and ensembles configured by SMAC from \autosklearn~(red).}
+    \label{fig:smac}
+\end{figure}
+
+Boxplots for the different datasets indicate that the performance of pipelines configured from \isklearn by SMAC are more similar in performance to pipelines configured from \isklearn by \irace than to the ensembles configured from \autosklearn by SMAC itself. 
+% Interestingly, the distributions of the accuracy scores for the pipelines configured by SMAC and \irace are very different, with quartiles for \irace being located closer to their median than for SMAC, but presenting strong outliers. 
+More repetitions of these experiments would be required to understand if the differences in distributions between \irace and SMAC results are consistent, or if the outliers observed are fluctuations in the experiments. Nonetheless, the comparison between pipelines and ensembles confirms that our proposed minimalist template is a contribution not only in terms of simplicity and interpretability, but also as to efficacy. Furthermore, it evidences the generality of the configuration space and setup proposed, as they can be coupled with any configurator that supports numerical, categorical, and conditional parameters, such as SMAC.
+
+\input{sections/alternative-setups}

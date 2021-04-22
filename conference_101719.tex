@@ -1,0 +1,125 @@
+\documentclass[conference,retainorgcmds]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{todonotes}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+    
+\usepackage{microtype}
+\usepackage{subfigure}
+\usepackage{booktabs} % for professional tables
+\usepackage{xspace}
+\usepackage{listings}
+\usepackage{multirow}
+
+% hyperref makes hyperlinks in the resulting PDF.
+% If your build breaks (sometimes temporarily if a hyperlink spans a page)
+% please comment out the following usepackage line and replace
+% \usepackage{icml2019} with \usepackage[nohyperref]{icml2019} above.
+\usepackage{url}
+\def\UrlBreaks{\do\/\do-}
+\usepackage{breakurl}
+\usepackage[breaklinks]{hyperref}
+\usepackage[normalem]{ulem}
+
+% Attempt to make hyperref and algorithmic work together better:
+\newcommand{\theHalgorithm}{\arabic{algorithm}}
+\newcommand{\irace}{\textsf{\small irace}\xspace}
+\newcommand{\smallirace}{\textsf{\footnotesize irace}\xspace}
+\newcommand{\tinyirace}{\textsf{\scriptsize irace}\xspace}
+\newcommand{\autosklearn}{\textsc{AutoSklearn}\xspace}
+\newcommand{\isklearn}{\textsf{\small iSklearn}\xspace}
+\newcommand{\smallisklearn}{\textsf{\footnotesize iSklearn}\xspace}
+\newcommand{\tinyisklearn}{\textsf{\scriptsize iSklearn}\xspace}
+\newcommand{\sklearn}{\textsf{\small scikit-learn}\xspace}
+\newcommand{\keras}{\textsf{\small Keras}\xspace}
+\newcommand{\tensorflow}{\textsf{\small TensorFlow}\xspace}
+
+\newcommand{\Nlags}{\ensuremath{N_\text{lags}}\xspace}
+\newcommand{\Nest}{\ensuremath{N_\text{estimators}}\xspace}
+\newcommand{\Nlayers}{\ensuremath{N_\text{layers}}\xspace}
+\newcommand{\activLayer}{\ensuremath{\emph{activation}_\text{layer}}\xspace}
+\newcommand{\activLast}{\ensuremath{\emph{activation}_\text{last}}\xspace}
+
+\renewcommand{\lstlistingname}{Algorithm}
+
+\newcommand{\carlosstrike}[2]{{\sout{#1}}{ \color{cyan}#2}}
+\newcommand{\carlos}[1]{{\color{cyan}#1}}
+
+\newcommand{\citet}[1]{\cite{#1}}
+\newcommand{\citep}[1]{\cite{#1}}
+\renewcommand{\baselinestretch}{0.96}
+\begin{document}
+
+%\title{\textsf{\huge iSklearn}: simple yet effective automated machine learning % through parallel learning}
+\title{\textsf{\huge iSklearn}: automated machine learning with \textsf{\huge irace}}
+% \thanks{Identify applicable funding agency here. If none, delete this.}
+
+\author{
+\IEEEauthorblockN{Carlos Vieira\IEEEauthorrefmark{1}, Adelson de Araújo\IEEEauthorrefmark{2}, José~E. Andrade~Júnior\IEEEauthorrefmark{1} and Leonardo~C.~T. Bezerra\IEEEauthorrefmark{1}}
+\IEEEauthorblockA{
+    \IEEEauthorrefmark{1}IMD, Universidade Federal do Rio Grande do Norte, Natal, RN, Brazil\\
+    Email: \{carlosv, dadojunior\}@ufrn.edu.br, leobezerra@imd.ufrn.br
+}
+\IEEEauthorblockA{
+    \IEEEauthorrefmark{2}University of Twente, The Netherlands\\
+    Email: a.dearaujo@utwente.nl}
+}
+
+\maketitle
+
+\begin{abstract}
+Automated algorithm engineering has become an important asset for academia and industry. \smallirace, for instance, is an algorithm configurator~(AC) that has successfully designed effective algorithms for optimization problems.
+% Besides the flexibility it provides when defining configuration space and setup, 
+The major advantage of \smallirace is combining learning and parallelization, but no fully-functional automated machine learning~(AutoML) system powered by \smallirace has yet been proposed. This is rather striking, as some of the most relevant existing AutoML tools are powered by ACs, of which \smallirace is one of the most effective examples.
+
+In this work, we 
+%seeks to fill this gap in the literature, 
+propose \smallisklearn, an \smallirace-powered AutoML system. Our proposal improves existing work applying an AC to engineer a machine learning~(ML) pipeline. First, our configuration space represents a minimalist pipeline template,
+% built on top of the scikit-learn algorithmic framework, 
+% comprising feature engineering and prediction algorithms. With this, 
+demonstrating that simpler pipelines can be
+competitive with elaborate approaches~(e.g. ensembles).
+Second, our configuration setup 
+% generalizes the existing modelling of an ML dataset as instances of an optimization problem, enabling 
+improves the application of AC-based AutoML to time series~(TS) problems, and is more flexible to fit other applications.
+
+We evaluate \smallisklearn on three major ML domains, namely computer vision (CV), natural language processing (NLP), and TS. Results prove competitive to \autosklearn, a state-of-the-art AutoML system also built on scikit-learn. Furthermore, the compositions of the pipelines devised vary with the problem domain and dataset considered, providing further evidence for the need of AutoML tools. We conclude our investigation ablating through the proposed configuration space and setup to understand their impact on the performance of \smallisklearn.
+%We focus the ablation on CV and NLP problems, where the margin for improvement of the automatically engineered pipelines is greater. 
+\end{abstract}
+
+% \begin{IEEEkeywords}
+% automated machine learning, algorithm configuration, computer vision, natural language processing, time series analysis
+% \end{IEEEkeywords}
+
+\input{sections/intro}
+\input{sections/background}
+\input{sections/isklearn}
+\input{sections/vanilla-results}
+\input{sections/ablation}
+%\cleardoublepage
+\input{sections/conclusion}
+
+\appendices
+\input{appendices/config-space}
+\input{appendices/datasets}
+% \input{appendices/pipelines}
+
+% \section*{Acknowledgment}
+
+% The preferred spelling of the word ``acknowledgment'' in America is without 
+% an ``e'' after the ``g''. Avoid the stilted expression ``one of us (R. B. 
+% G.) thanks $\ldots$''. Instead, try ``R. B. G. thanks$\ldots$''. Put sponsor 
+% acknowledgments in the unnumbered footnote on the first page.
+
+% \bibliographystyle{ieeetran}
+% \bibliography{bibl}
+\input{bibliography}
+\end{document}

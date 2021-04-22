@@ -1,0 +1,46 @@
+%!TEX root = ../main.tex
+
+\section{Introduction}
+\label{sec:intro}
+
+Automated machine learning~(AutoML,~\cite{HutKotVan2019automl}) is a relevant research effort that seeks to reduce two of the most significant costs in the machine learning~(ML) industry. The first is the human resource cost, as the rising demand for ML engineers has led to a shortage of supply, greatly increasing personnel costs. The second, equally important, is the computational/environmental cost, as state-of-the-art ML models leave a significant carbon footprint~\cite{StrGanMcC2019energy} and require expensive to maintain infrastructures. 
+In an effort to alleviate this cost, cloud computing has become the method-of-choice for companies, specially when deep learning~(DL) techniques are required~\cite{LeCBenGeo2015dl}. %Environmental concerns are partially mitigated by this approach.
+
+%Achievieng AutoML research goals involve both algorithmic frameworks and search techniques. Concerning the former, the ML community has been well-served by full-fledged open source frameworks such as WEKA~\cite{hall2009weka} and \sklearn~\cite{scikit-learn}. Currently, frameworks specialized in deep learning~(DL)~\cite{tensorflow,pytorch,jia2014caffe,theano,keras} are even shipped off-the-shelf as default packages by some of the most relevant cloud computing providers. In addition, many such frameworks have been built for high-performance computing, therefore reducing energy waste.
+
+%Regarding search techniques, t
+The best-established AutoML approaches come from the fields of algorithm configuration~\cite{autoweka,auto-sklearn}, neuroevolution~\cite{StaMii2002neat,google-evonn,LuWhaBodDheDebGooBan2019nsganet}, and neural architecture search~\cite{ElsMetHut2019nas-survey}.
+These techniques have often achieved remarkable results in several different application domains.
+Indeed, the breakthroughs in the field have led AutoML tools to focus not only on tabular datasets, but also on challenging domains such as computer vision~(CV), natural language processing~(NLP), and time series~(TS) analysis.
+Though the most striking results in those fields rely on DL, their computational cost and carbon footprint are often prohibitive and so AutoML approaches based on simpler ML pipelines remain an important alternative. Another benefit of simpler pipelines is interpretability, in particular pipeline composition.% or to the fitted model.
+%However, the design and assessment of an AutoML approach is often so computationally costly that it may greatly reduce the short-term environmental benefits of the approach.
+
+This work investigates AutoML in this context of tackling challenging domains using (relatively) simple ML pipelines. To do so, we propose a fully-functional AutoML system dubbed \isklearn, which represents a contribution for at least three reasons. First, \isklearn is powered by \irace~\cite{lopez2016irace}, one of the best-established algorithm configurators that has repeatedly demonstrated its performance in several automated algorithm engineering tasks and/or application domains~\cite{BezerraPhD,BezLopStu2020}. In particular, \irace bridges the advantages of other configurators already employed in AutoML, namely the parallelization from HyperBand~\cite{li2017hyperband} and the model-based learning from SMAC~\cite{smac}. Yet, so far no AutoML initiative powered by \irace could be identified in the literature, likely because \irace has been originally proposed for configuring optimization algorithms. 
+
+The second way in which our work represents a contribution is related to pipeline simplicity. Specifically, 
+we define the configuration space of \isklearn as a machine learning vanilla template comprising a standard ML pipeline architecture, with a relevant set of algorithmic components available for (i)~feature engineering and (ii)~prediction. Our template is built on \sklearn, representing the common options a practitioner has at hand when first working with ML. An instantiation of this template represents a pipeline where all components were jointly selected and configured. Compared to other AutoML tools based on DL or ensembles, the interpretability of the pipelines proposed is greatly improved.
+
+The final contribution of our work concerns the configuration setup, i.e., how to model machine learning datasets as instances of an optimization problem. In more detail, we generalize the approach adopted by other algorithm configurators~\cite{auto-sklearn,autoweka}, enabling, for instance, the proper application of ML pipelines to TS analysis datasets. Given the number of application domains that present some form of temporal dependency, this improvement greatly increases the applicability of configurator-based AutoML tools.
+
+We evaluate the effectiveness of the proposed configuration space and setup on different application domains, including CV, NLP, and TS analysis. As expected, the configured pipelines are nearly always more effective than naively selecting an algorithm with its suggested default parameters. More importantly, even if the focus of this work is not benchmarking AutoML approaches, we produce ensembles using \autosklearn~\cite{auto-sklearn} to serve as baseline for our comparison. Remarkably, the differences in performance between models is minimal, and often the simpler pipelines from \isklearn outperform the ensembles from \autosklearn. Another important observation is how pipeline composition varies not only as a function of the application domain, but also of the dataset being tackled. Effectively, this provides further evidence for the need of AutoML tools that can be employed in academia and industry.
+%, corroborating that \irace is not only a feasible but also an effective approach to AutoML. The only exceptions concern two challenging problems for which the ensembles from \autosklearn outperform the pipeline configured from \isklearn by a non-negligible margin.
+%, even if the models are far from state-of-the-art performance.
+
+The last part of our investigation ablates the configuration space and setup to understand their individual importance to the effectiveness of \isklearn and produce insights that may indicate relevant future work. 
+% For this ablation, we restrict our investigation to CV and NLP problems, where the margin for improvement of the pipelines devised is larger. 
+To assess configuration space, we use SMAC to engineer pipelines from our template. Since SMAC is also the configurator that powers \autosklearn, the comparison between pipelines and ensembles helps isolate the impact of the minimalist template we propose. Results show that pipelines configured from \isklearn by SMAC are also competitive to the \autosklearn-generated ensembles, which confirms the benefits of our proposed configuration space.
+Finally, to ablate our configuration setup, we assess the impact of configuration budget, maximum cutoff time, and the sampling generalization we propose. Results show that these factors interact with the given domain and dataset, and that adequately adjusting each factor can be helpful. 
+% the most important of these is cutoff time, but in situations where increasing computational cost is not an option, our sampling generalization is an effective alternative.
+Furthermore, in the context of TS problems, our proposed sampling generalization makes \isklearn results outperform ensembles from \autosklearn for all datasets considered.
+% We start by assessing alternative configuration setups, and observe that pipelines configured from \isklearn can outperform ensembles produced by \autosklearn under different setups. Next, we investigate whether the performance of \isklearn pipelines could benefit from transfer learning. Interestingly, we are able to reproduce the insights produced by~\cite{YosCluBenLip2014transfer} in the context of transfer learning between neural networks, even if our configuration space includes many more estimators. More importantly, we observe that the accuracy of the pipelines configured from \isklearn are now much higher than in the initial experiments, regardless of configuration setup effects.
+
+%We summarize the contributions of our work as follows:
+%\begin{enumerate}
+%\itemsep0em
+%\item Applying \irace to the context of automated machine learning, defining a configuration space and setup that are made available to the community.
+%\item Assessing complimentary research directions that can increase the effectiveness of the proposed approach.
+%\item Identifying relevant insights while keeping the computational cost and environmental footprint constrained.
+%\end{enumerate}
+
+The remainder of this work is structured as follows. In Section~\ref{sec:background}, we briefly discuss background on automated machine learning, algorithm configuration, and \irace. Section~\ref{sec:isklearn} describes the configuration space and setup we propose for \isklearn, which we assess in Section~\ref{sec:results}. The last part of our investigation is given in Section~\ref{sec:further}, where we ablate the configuration space and setup. Finally, we conclude and discuss future work possibilities in Section~\ref{sec:conclusion}.
+

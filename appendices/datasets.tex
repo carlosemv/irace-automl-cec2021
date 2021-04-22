@@ -1,0 +1,28 @@
+\section{Datasets}
+
+% \item[Natal]
+% is a collection of real-world crime incidence time series provided by the Public Safety Secretariat of the state of Rio Grande do Norte in Brazil, in the context of the smart cities SmartMetropolis research project.%
+% \footnote{\url{http://smartmetropolis.imd.ufrn.br/?lang=en}}
+% We consider here the time series representing the number of occurrences in 17 different police-defined districts for training, and a global time series comprising all districts for testing, each containing trend, seasonality and autoregressive features. For each time series, the latter 20\% of the data is held out from model fitting, and used later as a testing set. To prevent overfitting in the configuration process, we regard as instance a tuple of three, randomly sampled districts. The performance of a configuration on a given instance is the average of its performance on each district of the tuple. Due to the nature of this problem, the evaluation of a candidate in a given district uses time series walk-forward cross-validation, i.e., splitting the series into five spans and assessing prediction on a given span from fitting on the previous ones.
+
+% \item[Large Movie Review Dataset~(LMRD)]\cite{lmrd}
+% is a natural language processing dataset used for binary sentiment analysis (classification) of online movie reviews collected from IMDB.\footnote{\url{http://www.imdb.com}} It consists of $50\,000$ highly polar reviews split evenly into training and testing sets. We used a TF-IDF representation of the bag-of-words model provided for each review. The setup adopted is mostly similar to that of the MNIST dataset, but considers 10 stratified folds (instead of 20), given the smaller number of samples in the set.
+
+\begin{description}
+\item[Fashion MNIST (FMNIST)]\cite{fashion}
+is a computer vision classification dataset. It contains  a $60\,000$-sample training set and a $10\,000$-sample testing set, each sample being a grey level, 28x28 pixels, centered image of an article of clothing. These can be one of ten different items, constituting the ten possible labels: t-shirt/top, trouser, pullover, dress, coat, sandal, shirt, sneaker, bag, and ankle boot.
+
+\item[Street View House Numbers~(SVHN)]\cite{svhn}
+is a real-world dataset of house numbers obtained from Google Street View images. It contains images of centered digits, targetting the real-world problem of digit recognition in natural scene images. These images are a little larger than those of FMNIST, with 32x32 pixels. It is also a somewhat larger dataset than FMNIST, with the default split comprising 73,257 samples for training and 26,032 for testing.
+
+\item[CIFAR-10]\cite{cifar}
+are datasets of 32x32-pixel natural scene images, like SVHN. These depict subjects of 10 different classes, each class having 6,000 samples: airplane, automobile, bird, cat, deer, dog, frog, horse, ship, truck. The default split comprises 50,000 training images and 10,000 test images.
+\end{description}
+
+All three CV datasets had their \textit{seen} samples divided into $k=20$ meta-folds (see discussion on problem sampling in Section~\ref{sec:config-setup}). They were also not subject to any data preparation, except for flattening the images when those were provided as 2-D arrays.
+
+% \subsection{Data preparation}
+% \subsection{Sampling}
+
+\section{\autosklearn resource limits}
+Each run of \autosklearn was given a memory limit of 12Gb for the machine learning algorithm. A cutoff time was given for training each model equal to the one given for \irace to finish an experiment in \isklearn (10 minutes for the regular setup). As \isklearn bases total budget on number of experiments (and not runtime), while \autosklearn only provides an option for total time limit, the mean time taken by \isklearn over 10 runs of each setup/dataset was used as the time budget for the equivalent \autosklearn runs.

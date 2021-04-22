@@ -1,0 +1,50 @@
+%!TEX root = ../main.tex
+\subsection{Configuration space}
+
+\begin{lstlisting}[caption={\small \smallisklearn template described as a grammar.}, label={alg:grammar},captionpos=b, float, basicstyle=\footnotesize\ttfamily]]
+S -> Preprocessing Prediction
+Preprocessing -> Scaling FE | none
+Scaling -> True | False
+FE -> Selection | Selection Extraction 
+	| Extraction Selection | Extraction
+Prediction -> Scaling Predictor
+\end{lstlisting}
+
+The configuration space proposed in this work is modeled as a template, given in Algorithm~\ref{alg:grammar}. The template models a standard ML pipeline architecture, comprising two high-level components. The first, \texttt{\small Preprocessing}, represents a feature preprocessing stage, performed over the data prior to fitting the model. In contrast to Auto-WEKA and \autosklearn, our template offers a single choice of data preparation, namely \texttt{\small Scaling} through standardization. Our rationale for this vanilla version is that data preparation is a fairly important part of the data science process, and that attempting to automatically engineer the whole process would exceed the scope of this work. For this reason, the datasets we later adopt for evaluating pipelines are subject to manual preparation, as we will detail in supplementary material\footnote{\url{https://github.com/carlosemv/irace-automl-cec2021}}. 
+
+%he pre-scaling step may be selected if there are any feature engineering components being considered. Pre-scaling, as well as scaling, consists of removing the mean (except for sparse datasets) and scaling to unit variance, using the StandardScaler class. The scaling step, as opposed to the pre-scaling one, is always an option for the configurator.
+
+Besides \texttt{\small Scaling}, the \texttt{\small Preprocessing} component comprises feature engineering~(\texttt{\small FE}). Available options are feature \texttt{\small Selection} and \texttt{\small Extraction}, which can be used simultaneously and, if so, in any order. We provide these possibilities as a manual pipeline design typically selects between these choices, but an automated design might benefit from using both. Algorithmic options for these components  are given in Table~\ref{tb:components} and further detailed in the supplementary material.%, for brevity. 
+
+In the case of feature \texttt{\small Extraction}, options are dimensionality reduction algorithms that vary depending on the characteristics of the dataset provided. 
+%: for sparse datasets, \textit{truncated singular value decomposition}~(SVD); otherwise, \textit{principal component analysis}~(PCA), \textit{independent component analysis}~(ICA), or \textit{dictionary learning}~(DL).
+%
+Options for component \texttt{\small Selection} are organized into groups, namely \emph{univariate} and \emph{multivariate}. Univariate feature selection retrieves a certain percentile of features based on a given scoring function computed between each feature and the target variable. \isklearn provides the most common functions available in scikit-learn, detailed in the supplementary material for brevity. Conversely, multivariate selection fits a feature importance model using a predictor, and retrieves only the most relevant. Table~\ref{tb:components} lists the predictors available for multivariate selection, which we choose due to their balance between efficacy and efficiency when used with their suggested default parameters.
+%, \isklearn provides a choice among several prediction algorithms.
+%: \emph{decision trees}~(DT,~\cite{decisiontrees}), \emph{random forests}~(RF,~\cite{randomforests}), and \emph{support vector machines}~(SVM), for either classification or regression, and; \emph{linear regression}~(LR), for regression only.%
+%\footnote{When used in the context of feature selection, we adopt these algorithms with their suggested default parameters, since the configuration of nested models is a complex aspect to be addressed in future work.}
+Furthermore, multivariate selection can be performed recursively, using the \emph{recursive feature elimination}~(RFE) approach.
+
+\begin{table}[!t]
+\centering
+\caption{\small Algorithms considered for each template component.}
+\label{tb:components}
+\scalebox{0.8}{
+\begin{tabular}{lp{4.3cm}p{2.5cm}}
+\hline
+\textbf{Component} & \textbf{Algorithms} & \textbf{Conditions} \\ \hline
+\multirow{2}{*}{\texttt{Extraction}} & SVD & sparse datasets\\\cline{2-3}
+				    & PCA, ICA, DL & otherwise \\ \hline
+\texttt{Selection} & \emph{univariate},\linebreak \emph{multivariate}  \\ \hline
+\multirow{2}{*}{\emph{multivariate}} & DT, RF, SVM & classif. \& regres.\\\cline{2-3}
+		&  LR & regression\\ \hline
+\multirow{2}{*}{\texttt{Predictor}} & LR, DT, RF, SVM, kNN, MLP, AB & classif. \& regres.\\\cline{2-3}
+		&  LR & regression\\ \hline
+\end{tabular}}
+\\[1em]
+(LR stands for linear or logistic regression, depending on the task.)
+\end{table}
+
+The second high-level component of \isklearn is \texttt{\small Prediction}, where model fitting is actually performed. For this component, we consider a representative subset of the estimators available in \sklearn, listed in Table~\ref{tb:components}. Our rationale with this subset is that it represents most families of relevant approaches, such as generalized linear models, trees, manifold learning, neural networks, and ensembles. Options available vary according to the task nature, as \isklearn is able to cope with both classification and regression.
+%Besides the options already discussed for model-based selection~(DT, RF, SVM, and LR), we also consider \emph{k-nearest neighbors}~(kNN), \emph{multi-layer perceptron}~(MLP,~\cite{mlp}), and \emph{AdaBoost}~(AB,~\cite{adaboost}). 
+Finally, being heuristic algorithms, these predictors present hyperparameters of their own, which we expose for configuration. The details on the hyperparameters exposed for each predictor and their valid domains are given as supplementary material.
