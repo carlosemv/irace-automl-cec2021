@@ -1,28 +1,36 @@
 \section{Datasets}
 
-% \item[Natal]
-% is a collection of real-world crime incidence time series provided by the Public Safety Secretariat of the state of Rio Grande do Norte in Brazil, in the context of the smart cities SmartMetropolis research project.%
-% \footnote{\url{http://smartmetropolis.imd.ufrn.br/?lang=en}}
-% We consider here the time series representing the number of occurrences in 17 different police-defined districts for training, and a global time series comprising all districts for testing, each containing trend, seasonality and autoregressive features. For each time series, the latter 20\% of the data is held out from model fitting, and used later as a testing set. To prevent overfitting in the configuration process, we regard as instance a tuple of three, randomly sampled districts. The performance of a configuration on a given instance is the average of its performance on each district of the tuple. Due to the nature of this problem, the evaluation of a candidate in a given district uses time series walk-forward cross-validation, i.e., splitting the series into five spans and assessing prediction on a given span from fitting on the previous ones.
-
-% \item[Large Movie Review Dataset~(LMRD)]\cite{lmrd}
-% is a natural language processing dataset used for binary sentiment analysis (classification) of online movie reviews collected from IMDB.\footnote{\url{http://www.imdb.com}} It consists of $50\,000$ highly polar reviews split evenly into training and testing sets. We used a TF-IDF representation of the bag-of-words model provided for each review. The setup adopted is mostly similar to that of the MNIST dataset, but considers 10 stratified folds (instead of 20), given the smaller number of samples in the set.
-
 \begin{description}
 \item[Fashion MNIST (FMNIST)]\cite{fashion}
-is a computer vision classification dataset. It contains  a $60\,000$-sample training set and a $10\,000$-sample testing set, each sample being a grey level, 28x28 pixels, centered image of an article of clothing. These can be one of ten different items, constituting the ten possible labels: t-shirt/top, trouser, pullover, dress, coat, sandal, shirt, sneaker, bag, and ankle boot.
+is a computer vision classification dataset. It contains  a $60000$-sample training set and a $10000$-sample testing set, each sample being a grey level, 28x28 pixels, centered image of an article of clothing. These can be one of ten different items, constituting the ten possible labels: t-shirt/top, trouser, pullover, dress, coat, sandal, shirt, sneaker, bag, and ankle boot.
 
 \item[Street View House Numbers~(SVHN)]\cite{svhn}
-is a real-world dataset of house numbers obtained from Google Street View images. It contains images of centered digits, targetting the real-world problem of digit recognition in natural scene images. These images are a little larger than those of FMNIST, with 32x32 pixels. It is also a somewhat larger dataset than FMNIST, with the default split comprising 73,257 samples for training and 26,032 for testing.
+is a real-world dataset of house numbers obtained from Google Street View images. It contains images of centered digits, targetting the real-world problem of digit recognition in natural scene images. These images are a little larger than those of FMNIST, with 32x32 pixels. It is also a somewhat larger dataset than FMNIST, with the default split comprising $73257$ samples for training and $26032$ for testing.
 
 \item[CIFAR-10]\cite{cifar}
-are datasets of 32x32-pixel natural scene images, like SVHN. These depict subjects of 10 different classes, each class having 6,000 samples: airplane, automobile, bird, cat, deer, dog, frog, horse, ship, truck. The default split comprises 50,000 training images and 10,000 test images.
+is a dataset of 32x32-pixel natural scene images, like SVHN. These depict subjects of 10 different classes, each class having $6000$ samples: airplane, automobile, bird, cat, deer, dog, frog, horse, ship, truck. The default split comprises $50000$ training images and $10000$ test images.
+
+\item[LMRD]\cite{lmrd}
+is a NLP dataset used for binary sentiment analysis of online movie reviews collected from IMDB\footnote{\url{http://www.imdb.com}}. It consists of $50000$ highly polar reviews split evenly into training and testing sets.
+
+\item[Reuters]\cite{reuters}
+is a collection of documents collected from the Reuters news agency, used for categorical topic classification. It contains 46 possible labels, and the training and testing sets contain $8982$ and $2246$ samples, respectively.
+
+\item[AGNews]\cite{agnews}
+is a collection of news articles collected from different sources, and like Reuters is also used here for topic classification, constructed by taking the 4 largest classes from the original corpus. Its train set contains $12000$ samples, and its testing set $7600$.
+
+\item[Natal]
+is a real-world private dataset of crimes obtained from the state police department in RN, Brazil. It consists of crime counts aggregated monthly in a grid of squares (1km x 1km). A total of 98553 crimes from February 2017 to November 2018 were utilized. The training set consisted of 80\% of the samples and 20\% were used for testing. Note this dataset is not made publicly available, but was provided under a confidentiality agreement.
+
+\item[Boston]
+is a real-world public dataset of crimes obtained from Boston's open data hub\footnote{\url{https://data.boston.gov/}}.  It consists of crime counts aggregated monthly in a grid of squares (1km x 1km). A total of 301269 crimes from July 2016 to September 2019 were utilized. Training/testing split was the same as that for Natal.
 \end{description}
 
-All three CV datasets had their \textit{seen} samples divided into $k=20$ meta-folds (see discussion on problem sampling in Section~\ref{sec:config-setup}). They were also not subject to any data preparation, except for flattening the images when those were provided as 2-D arrays.
+None of the three CV datasets were subject to any special data preparation, except for flattening the images when those were provided as 2-D arrays. Data preparation for NLP data consisted only of feature extraction through the \sklearn TF-IDF vectorizer, using default parameters. As for the TS datasets, data preparation consisted of generating the input features, which were 24 autoregressive lags (i.e., $\left \{ y_{t-k} \mid k \in \left \{ 1,2,...24 \right \} \right \}$), with the regression target being the crime count in the following month ($y_t$).
 
-% \subsection{Data preparation}
-% \subsection{Sampling}
+For CV and NLP datasets, their \textit{seen} samples were divided into $k=20$ meta-folds (see discussion on problem sampling in Section~\ref{sec:config-setup}) when the number of samples in that set was equal to, or exceeded, $50000$, and into $k=10$ meta-folds otherwise. This approach was chosen in order to minimize risk of too few samples being provided for proper model training, considering each meta-fold would still undergo 5-fold cross-validation. Under this rule, all three CV datasets were split into 20 meta-folds, and all NLP datasets into 10. For the TS datasets, we chose to fix $k=10$ even with a larger number of samples, since preliminary experiments showed the time-series cross-validation method strongly disfavored training with the smaller number of samples provided when $k=20$.
 
 \section{\autosklearn resource limits}
 Each run of \autosklearn was given a memory limit of 12Gb for the machine learning algorithm. A cutoff time was given for training each model equal to the one given for \irace to finish an experiment in \isklearn (10 minutes for the regular setup). As \isklearn bases total budget on number of experiments (and not runtime), while \autosklearn only provides an option for total time limit, the mean time taken by \isklearn over 10 runs of each setup/dataset was used as the time budget for the equivalent \autosklearn runs.
+
+% include mean runtimes table?
