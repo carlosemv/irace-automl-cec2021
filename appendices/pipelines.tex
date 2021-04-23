@@ -45,3 +45,13 @@ Concerning TS problems, LR is frequently selected (6 times) for the Boston datas
     \caption{Pipeline composition for each dataset.}
     \label{fig:dataset_composition}
 \end{figure*}
+
+\section{Variance analysis for regular setup}
+We provide variance analysis for the results shown in Table~\ref{tb:results} through boxplots, given in Figure~\ref{fig:vanilla-boxplots}.
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{img/vanilla-boxplots.png}
+    \caption{Accuracy~(\%) and $R^2$ score comparison between pipelines configured by \isklearn, ensembles produced by \autosklearn, as well as the three best-performing default models for each dataset.}
+    \label{fig:vanilla-boxplots}
+\end{figure*}
