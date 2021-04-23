@@ -1,4 +1,4 @@
-\documentclass[conference,retainorgcmds]{IEEEtran}
+\documentclass[conference,letterpaper,retainorgcmds]{IEEEtran}
 \IEEEoverridecommandlockouts
 % The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
 \usepackage{cite}
@@ -75,7 +75,15 @@
     Email: a.dearaujo@utwente.nl}
 }
 
+% copyright notice
+\IEEEoverridecommandlockouts
+\IEEEpubid{\makebox[\columnwidth]{978-1-7281-8393-0/21/\$31.00~\copyright2021 IEEE \hfill}
+\hspace{\columnsep}\makebox[\columnwidth]{ }}
+
 \maketitle
+
+% copyright notice
+\IEEEpubidadjcol
 
 \begin{abstract}
 Automated algorithm engineering has become an important asset for academia and industry. \smallirace, for instance, is an algorithm configurator~(AC) that has successfully designed effective algorithms for optimization problems.
@@ -110,20 +118,20 @@ We evaluate \smallisklearn on three major ML domains, namely computer vision (CV
 \input{sections/conclusion}
 
 \section*{Acknowledgment}
-This work is partially supported by UFRN in the context of the Smart Metropolis Project. This research was also supported by the High Performance Computing Center at UFRN (NPAD/UFRN).
+This work is partially supported by UFRN in the context of the Smart Metropolis Project. This research was also supported by NPAD/UFRN.
 
 % The preferred spelling of the word ``acknowledgment'' in America is without 
 % an ``e'' after the ``g''. Avoid the stilted expression ``one of us (R. B. 
 % G.) thanks $\ldots$''. Instead, try ``R. B. G. thanks$\ldots$''. Put sponsor 
 % acknowledgments in the unnumbered footnote on the first page.
 
+% \bibliographystyle{ieeetran}
+% \bibliography{bibl}
+\input{bibliography}
 
 \appendices
 \input{appendices/config-space} % Appendix A, B
 \input{appendices/datasets} % Appendix C, D
 \input{appendices/pipelines} % Appendix E, F
 
-% \bibliographystyle{ieeetran}
-% \bibliography{bibl}
-\input{bibliography}
 \end{document}
