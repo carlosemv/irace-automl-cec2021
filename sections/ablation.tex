@@ -8,7 +8,7 @@ Results from the first part of our investigation validated our \irace AutoML pro
 % Yet, CIFAR-10 results indicate that further investigation is required on more challenging domains, such as computer vision. In this section, we assess~(i)~alternative configuration setups and~(ii)~the feasibility of transfer learning. The datasets adopted in this section were chosen for their popularity in the small image classification literature. Specifically, we replace MNIST with Fashion MNIST~(FMNIST), given the small margin for improvement on the former. In addition, we also consider CIFAR-100, a dataset similar to CIFAR-10, and SVHN, a house number recognition problem. Further information on these datasets is given in the supplementary material, particularly the details on manual data preparation, sampling, and resource limits for \autosklearn.
 
 %\input{sections/transfer-learning}
-\subsection{Comparing configuration spaces}
+\subsection{Comparing Configuration Spaces}
 
 To assess the benefits of having a simpler template in terms of efficacy of the pipelines produced, we use SMAC~\cite{smac} to configure pipelines from our template. Since SMAC is the configurator powering \autosklearn, the comparison given in Figure~\ref{fig:smac} helps us isolate the effects of configurator and templated adopted. We focus this investigation on CV datasets as they were the most challenging for both AutoML approaches.
 

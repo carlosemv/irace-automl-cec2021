@@ -8,7 +8,7 @@ Automated machine learning~(AutoML) research spans over a diverse set of fields.
 %
 %In this section, we first discuss background concepts particularly related to AutoML, and later discuss our vanilla package, \isklearn.
 %
-\subsection{Automated machine learning}
+\subsection{Automated Machine Learning}
 
 Automated machine learning~(AutoML) is a fast-expanding field, largely due to the joint efforts from industry and academia. Yet, its seminal works date from over two decades ago~(e.g., \cite{RonSch1994}), and range from the research on evolutionary algorithms~(EAs) to the research on neural networks. Indeed, the more recent, abrupt expansion in AutoML is largely due to the groundbreaking results achieved by deep learning algorithms~\cite{LeCBenGeo2015dl}. Effectively, these results have both~(i)~drawn the attention of the industry to the efficacy of machine learning, and~(ii)~demonstrated the challenge in designing and configuring predictors.
 Since AutoML initiatives stem from diverse research fields, an exhaustive review is beyond the scope of this paper. Below, we focus our discussion on the most important aspects of the main families of approaches from the literature:
@@ -24,7 +24,7 @@ Indeed, a number of recent breakthroughs in deep learning research are directly 
 
 A few important works do not fit our taxonomy. Yet, we believe our brief review is important for the discussion on algorithm configuration we conduct next. More importantly, it highlights the diversity in approaches that have been proposed over the years, and how challenging it would be to properly benchmark them.
 
-\subsection{Algorithm configuration}
+\subsection{Algorithm Configuration}
 
 Algorithm configuration is currently better understood as automated algorithm engineering, a growing field that comprehends different tasks, such as selection, configuration, design, and analysis~\cite{BezerraPhD}. The prominent results obtained by these approaches span over a wide range of application domains, such as decision~\cite{khudabukhsh2016satenstein}, optimization~\cite{BezerraPhD}, control~\cite{hasselmann2018automatic}, and, more recently, machine learning~\cite{autoweka,auto-sklearn}. 
 
@@ -51,7 +51,7 @@ An iteration finishes when either a minimum number of surviving candidate config
 
 The effectiveness of \irace has been repeatedly demonstrated on diverse application domains~\cite{BezerraPhD}. Besides its effectiveness, the best feature \irace brings is the flexibility in the definition of the configuration space and setup. Concerning the former, \irace was one of the first configurators able to couple with numerical and categorical hyperparameters, and with their dependencies. Regarding the configuration setup, \irace has been applied to domains as diverse as dynamic and multi-objective optimization. Yet, these effective results were a product of carefully, manually designed setups. This is likely the reason why no application of \irace to the context of automated machine learning can be identified in the literature.%, which we propose and assess in the next section. 
 
-\subsection{Contrasting algorithms}
+\subsection{Contrasting Algorithms}
 Though \irace is the focus of this work, we provide further discussion on how it compares to the two most relevant algorithm configurators employed in the ML literature, i.e., SMAC~\cite{smac} and HyperBand~\cite{li2017hyperband}. Both racing and sharpening are standard techniques in the algorithm configuration literature~\cite{BezLopStu2020}, and each configurator proposes a different approach to achieve them. SMAC is a sequential model-based approach, i.e., a surrogate model is used to reduce the number of actual evaluations performed. When racing, candidate configurations are evaluated based on the surrogate model, and sharpening is performed by comparing the configuration obtained from the model search with the best current configuration. SMAC and \irace are alike in being model-based, as previously discussed. Yet they differ in that SMAC is inherently sequential, whereas \irace uses parallelization to a large extent.
 
 HyperBand~\cite{li2017hyperband} represents a model-free paradigm, using a massively parallel racing of candidate configurations. Sharpening is promoted by probing configurations with reduced budgets, i.e., training configurations for increasingly longer periods. Since model-based learning is not employed, the candidate configurations in HyperBand are completely independent, which allows for a parallelization level unmatched by model-based configurators. However, sharpening is only effective in HyperBand as long as the dataset investigated presents a strong correlation between performance for varying training budgets, which is not always the case in ML~\cite{ying2019nasbench}.
